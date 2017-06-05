@@ -252,6 +252,9 @@ void FDK_put (HANDLE_FDK_BITBUF hBitBuf, UINT value, const UINT numberOfBits)
   UINT byteOffset = hBitBuf->BitNdx >> 3 ;
   UINT bitOffset  = hBitBuf->BitNdx & 0x07 ;
 
+  if (numberOfBits <= 0)
+    return;
+
   hBitBuf->BitNdx     = (hBitBuf->BitNdx + numberOfBits) & (hBitBuf->bufBits - 1) ;
   hBitBuf->BitCnt    +=  numberOfBits ;
   hBitBuf->ValidBits +=  numberOfBits ;
