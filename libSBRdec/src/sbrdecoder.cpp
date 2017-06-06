@@ -1327,9 +1327,11 @@ sbrDecoder_DecodeElement (
   HANDLE_SBR_HEADER_DATA hSbrHeader = &self->sbrHeader[elementIndex][hSbrElement->useHeaderSlot[hSbrElement->useFrameSlot]];
   HANDLE_PS_DEC h_ps_d = self->hParametricStereoDec;
 
+  int  stereo = (hSbrElement->elementID == ID_CPE) ? 1 : 0;
+
   /* get memory for frame data from scratch */
   SBR_FRAME_DATA *hFrameDataLeft  = &hSbrElement->pSbrChannel[0]->frameData[hSbrElement->useFrameSlot];
-  SBR_FRAME_DATA *hFrameDataRight = &hSbrElement->pSbrChannel[1]->frameData[hSbrElement->useFrameSlot];
+  SBR_FRAME_DATA *hFrameDataRight = stereo ? &hSbrElement->pSbrChannel[1]->frameData[hSbrElement->useFrameSlot] : NULL;
 
   SBR_ERROR errorStatus = SBRDEC_OK;
 
@@ -1337,7 +1339,6 @@ sbrDecoder_DecodeElement (
   INT  strideIn, strideOut, offset0, offset1;
   INT  codecFrameSize = self->codecFrameSize;
 
-  int  stereo = (hSbrElement->elementID == ID_CPE) ? 1 : 0;
   int  numElementChannels = hSbrElement->nChannels; /* Number of channels of the current SBR element */
 
   if (self->flags & SBRDEC_FLUSH) {
