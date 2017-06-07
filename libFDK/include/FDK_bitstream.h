@@ -208,6 +208,7 @@ FDK_INLINE void FDKdeleteBitStream (HANDLE_FDK_BITSTREAM hBitStream)
 FDK_INLINE UINT FDKreadBits(HANDLE_FDK_BITSTREAM hBitStream,
                         const UINT numberOfBits)
 {
+  FDK_ASSERT (numberOfBits <= 32);
 #ifdef noOPTIMIZE_FDKREADBITS
   INT missingBits = numberOfBits - hBitStream->BitsInCache;
   if (missingBits > 0)
