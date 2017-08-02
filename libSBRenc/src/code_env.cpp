@@ -449,7 +449,7 @@ FDKsbrEnc_codeEnvelope(SCHAR             *sfb_nrg,
 
   tmp1 = FL2FXCONST_DBL(0.5f) >> (DFRACT_BITS-16-1);
   tmp2 = h_sbrCodeEnvelope->dF_edge_1stEnv >> (DFRACT_BITS-16);
-  tmp3 = (FIXP_DBL)(((INT)(LONG)h_sbrCodeEnvelope->dF_edge_incr*h_sbrCodeEnvelope->dF_edge_incr_fac) >> (DFRACT_BITS-16));
+  tmp3 = (FIXP_DBL)((INT)((ULONG)h_sbrCodeEnvelope->dF_edge_incr*h_sbrCodeEnvelope->dF_edge_incr_fac) >> (DFRACT_BITS-16));
 
   dF_edge_1stEnv = tmp1 + tmp2 + tmp3;
 
