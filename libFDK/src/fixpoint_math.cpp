@@ -302,10 +302,12 @@ LNK_SECTION_CODE_L1 FIXP_DBL CalcInvLdData(FIXP_DBL x)
   UINT lookup12 = (UINT)(LONG)fMult((FIXP_DBL)lookup1,  (FIXP_DBL) lookup2);
   UINT lookup   = (UINT)(LONG)fMult((FIXP_DBL)lookup12, (FIXP_DBL) lookup3f);
 
-  FIXP_DBL retVal = exp < 32 ? (lookup<<3) >> exp : 0;
+  FIXP_DBL retVal;
 
   if (set_max)
     retVal=FL2FXCONST_DBL(1.0f);
+  else
+    retVal = exp < 32 ? (lookup<<3) >> exp : 0;
 
   return retVal;
 }
