@@ -151,7 +151,7 @@ inline FIXP_DBL sqrtFixp_lookup(FIXP_DBL x)
   UINT idx=(y>>26)-16;
   USHORT frac=(y>>10)&0xffff;
   USHORT nfrac=0xffff^frac;
-  UINT t=nfrac*sqrt_tab[idx]+frac*sqrt_tab[idx+1];
+  UINT t=nfrac*(UINT)sqrt_tab[idx]+frac*(UINT)sqrt_tab[idx+1];
   t=t>>(zeros>>1);
   return(is_zero ? 0 : t);
 }
@@ -179,7 +179,7 @@ inline FIXP_DBL sqrtFixp_lookup(FIXP_DBL x, INT *x_e)
   UINT idx=(y>>26)-16;
   USHORT frac=(y>>10)&0xffff;
   USHORT nfrac=0xffff^frac;
-  UINT t=nfrac*sqrt_tab[idx]+frac*sqrt_tab[idx+1];
+  UINT t=nfrac*(UINT)sqrt_tab[idx]+frac*(UINT)sqrt_tab[idx+1];
 
   /* Write back exponent */
   *x_e = e >> 1;
