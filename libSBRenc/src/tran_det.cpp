@@ -867,6 +867,8 @@ INT FDKsbrEnc_InitSbrFastTransientDetector(
        the CalcInvLdData expects the operand to be scaled by LD_DATA_SHIFT.
        Therefore, the correctly scaled result is dBf_int^(2^(EXP_E-LD_DATA_SHIFT)),
        which is dBf_int^2 */
+    if (dBf_int > 46340)
+      dBf_int = 46340;
     dBf_int  *= dBf_int;
 
     /* Calc fractional part */
