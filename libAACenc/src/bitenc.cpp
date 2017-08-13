@@ -186,7 +186,7 @@ static INT FDKaacEnc_encodeIcsInfo(INT blockType,
       statBits = 6;
     } else
     {
-      statBits = (!(syntaxFlags & AC_SCALABLE)) ? 11 : 10;
+      statBits = 10;
     }
   }
 
@@ -194,8 +194,8 @@ static INT FDKaacEnc_encodeIcsInfo(INT blockType,
 
     if (!(syntaxFlags & AC_ELD)){
       FDKwriteBits(hBitStream,icsReservedBit,1);
-      FDKwriteBits(hBitStream,blockType,2);
       FDKwriteBits(hBitStream, (windowShape == LOL_WINDOW) ? KBD_WINDOW : windowShape,1);
+      FDKwriteBits(hBitStream,blockType,2);
     }
 
     switch(blockType){
@@ -204,10 +204,6 @@ static INT FDKaacEnc_encodeIcsInfo(INT blockType,
     case STOP_WINDOW:
       FDKwriteBits(hBitStream,maxSfbPerGroup,6);
 
-      if (!(syntaxFlags & (AC_SCALABLE|AC_ELD)) ) { /* If not scalable syntax then ... */
-        /* No predictor data present */
-        FDKwriteBits(hBitStream, 0, 1);
-      }
       break;
 
     case SHORT_WINDOW:
@@ -650,10 +646,12 @@ static INT FDKaacEnc_writeExtensionPayload( HANDLE_FDK_BITSTREAM  hBitStream,
   {
     UCHAR  fillByte = 0x00;  /* for EXT_FIL and EXT_FILL_DATA */
 
-    if (hBitStream != NULL) {
-      FDKwriteBits(hBitStream, extPayloadType, EXT_TYPE_BITS);
+    if (extPayloadType != EXT_SBR_DATA) {
+      if (hBitStream != NULL) {
+        FDKwriteBits(hBitStream, extPayloadType, EXT_TYPE_BITS);
+      }
+      extBitsUsed += EXT_TYPE_BITS;
     }
-    extBitsUsed += EXT_TYPE_BITS;
 
     switch (extPayloadType) {
       case EXT_DYNAMIC_RANGE:
@@ -948,7 +946,9 @@ INT FDKaacEnc_writeExtensionData( HANDLE_TRANSPORTENC  hTpEnc,
         if (hBitStream != NULL) {
           /* write bitstream */
           FDKwriteBits(hBitStream, ID_FIL, EL_ID_BITS);
-          if (esc_count >= 0) {
+          if (pExtension->type == EXT_SBR_DATA) {
+            FDKwriteBits(hBitStream, 1, 1);
+          } else if (esc_count >= 0) {
             FDKwriteBits(hBitStream, 15, FILL_EL_COUNT_BITS);
             FDKwriteBits(hBitStream, esc_count, FILL_EL_ESC_COUNT_BITS);
           } else {
@@ -956,7 +956,11 @@ INT FDKaacEnc_writeExtensionData( HANDLE_TRANSPORTENC  hTpEnc,
           }
         }
 
-        extBitsUsed += EL_ID_BITS + FILL_EL_COUNT_BITS + ((esc_count>=0) ? FILL_EL_ESC_COUNT_BITS : 0);
+        if (pExtension->type == EXT_SBR_DATA) {
+          extBitsUsed += EL_ID_BITS + 1;
+        } else {
+          extBitsUsed += EL_ID_BITS + FILL_EL_COUNT_BITS + ((esc_count>=0) ? FILL_EL_ESC_COUNT_BITS : 0);
+        }
 
         cnt = fixMin(cnt*8, payloadBits);  /* convert back to bits */
         extBitsUsed += FDKaacEnc_writeExtensionPayload( hBitStream,
@@ -1026,7 +1030,7 @@ AAC_ENCODER_ERROR FDKaacEnc_ChannelElementWrite( HANDLE_TRANSPORTENC  hTpEnc,
 
   if (!(syntaxFlags & (AC_SCALABLE|AC_ER))) {
     if (hBitStream != NULL) {
-      FDKwriteBits(hBitStream, pElInfo->elType, EL_ID_BITS);
+      FDKwriteBits(hBitStream, pElInfo->elType + 1, EL_ID_BITS);
     }
     bitDemand += EL_ID_BITS;
   }
@@ -1034,7 +1038,7 @@ AAC_ENCODER_ERROR FDKaacEnc_ChannelElementWrite( HANDLE_TRANSPORTENC  hTpEnc,
   /* Iterate through sequence table */
   i = 0;
   ch = 0;
-  decision_bit = 0;
+  decision_bit = 1;
   do {
     /* some tmp values */
     SECTION_DATA *pChSectionData = NULL;

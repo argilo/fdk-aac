@@ -1934,7 +1934,6 @@ const FIXP_DBL invCount[80]=  /* This could be 16-bit wide */
 
 static const rbd_id_t el_aac_sce[] = {
   adtscrc_start_reg1,
-  element_instance_tag,
   global_gain,
   ics_info,
   section_data,
@@ -1956,8 +1955,6 @@ static const struct element_list node_aac_sce = {
 
 static const rbd_id_t el_aac_cpe[] = {
   adtscrc_start_reg1,
-  element_instance_tag,
-  common_window,
   link_sequence
 };
 
@@ -1997,14 +1994,14 @@ static const rbd_id_t el_aac_cpe1[] =
   /* common_window = 1 */
   ics_info,
   ms,
+  tns_data_present,
+  tns_data,
+  tns_data_present,
+  tns_data,
 
   global_gain,
   section_data,
   scale_factor_data,
-  pulse,
-  tns_data_present,
-  tns_data,
-  gain_control_data_present,
   /*gain_control_data,*/
   spectral_data,
   next_channel,
@@ -2013,10 +2010,6 @@ static const rbd_id_t el_aac_cpe1[] =
   global_gain,
   section_data,
   scale_factor_data,
-  pulse,
-  tns_data_present,
-  tns_data,
-  gain_control_data_present,
   /*gain_control_data,*/
   spectral_data,
   adtscrc_end_reg1,
