@@ -496,8 +496,10 @@ static INT FDKaacEnc_encodeTnsData(TNS_INFO *tnsInfo,
     {
       if (tnsPresent==1) { /* there is data to be written*/
         for (i=0; i<numOfWindows; i++) {
-          FDKwriteBits(hBitStream,tnsInfo->numOfFilters[i],(blockType==SHORT_WINDOW?1:2));
-          tnsBits += (blockType==SHORT_WINDOW?1:2);
+          if (blockType==SHORT_WINDOW) {
+            FDKwriteBits(hBitStream,tnsInfo->numOfFilters[i],1);
+            tnsBits += 1;
+          }
           if (tnsInfo->numOfFilters[i]) {
             FDKwriteBits(hBitStream,(tnsInfo->coefRes[i]==4?1:0),1);
             tnsBits += 1;
@@ -545,7 +547,7 @@ static INT FDKaacEnc_encodeTnsData(TNS_INFO *tnsInfo,
     else {
       if (tnsPresent != 0) {
         for (i=0; i<numOfWindows; i++) {
-          tnsBits += (blockType==SHORT_WINDOW?1:2);
+          tnsBits += (blockType==SHORT_WINDOW?1:0);
           if (tnsInfo->numOfFilters[i]) {
             tnsBits += 1;
             for (j=0; j<tnsInfo->numOfFilters[i]; j++) {

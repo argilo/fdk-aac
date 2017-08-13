@@ -410,7 +410,7 @@ AAC_ENCODER_ERROR FDKaacEnc_InitTnsConfiguration(INT bitRate,
 
       tC->confTab.filterEnabled[HIFILT] = 1;
       tC->confTab.filterEnabled[LOFILT] = 1;
-      tC->confTab.seperateFiltersAllowed = 1;
+      tC->confTab.seperateFiltersAllowed = 0;
 
       /* compute autocorrelation window based on maximum filter order for given block type */
       /* for (i = 0; i <= tC->maxOrder + 3; i++) {
@@ -801,8 +801,6 @@ INT FDKaacEnc_TnsDetect(
 
     tnsInfo->direction[subBlockNumber][HIFILT] = tC->confTab.tnsFilterDirection[HIFILT];
     tnsInfo->length[subBlockNumber][HIFILT] = sfbCnt - tC->lpcStartBand[HIFILT];
-
-    return 0;
 
     /* disable TNS if predictionGain is less than 3dB or sumSqrCoef is too small */
     if ((tsbi->predictionGain[HIFILT] > tC->confTab.threshOn[HIFILT]) || (sumSqrCoef > (tC->confTab.tnsLimitOrder[HIFILT]/2 + 2)))
