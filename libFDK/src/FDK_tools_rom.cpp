@@ -1951,45 +1951,9 @@ static const struct element_list node_aac_sce = {
   { NULL, NULL }
 };
 
-static const rbd_id_t el_aac_cpe[] = {
+static const rbd_id_t el_aac_cpe[] =
+{
   adtscrc_start_reg1,
-  link_sequence
-};
-
-static const rbd_id_t el_aac_cpe0[] =
-{
-  /*common_window = 0*/
-  global_gain,
-  ics_info,
-  section_data,
-  scale_factor_data,
-  pulse,
-  tns_data_present,
-  tns_data,
-  gain_control_data_present,
-  /*gain_control_data,*/
-  spectral_data,
-  next_channel,
-
-  adtscrc_start_reg2,
-  global_gain,
-  ics_info,
-  section_data,
-  scale_factor_data,
-  pulse,
-  tns_data_present,
-  tns_data,
-  gain_control_data_present,
-  /*gain_control_data,*/
-  spectral_data,
-  adtscrc_end_reg1,
-  adtscrc_end_reg2,
-  end_of_sequence
-};
-
-static const rbd_id_t el_aac_cpe1[] =
-{
-  /* common_window = 1 */
   ics_info,
   ms,
   tns_data_present,
@@ -2000,7 +1964,6 @@ static const rbd_id_t el_aac_cpe1[] =
   global_gain,
   section_data,
   scale_factor_data,
-  /*gain_control_data,*/
   spectral_data,
   next_channel,
 
@@ -2008,26 +1971,15 @@ static const rbd_id_t el_aac_cpe1[] =
   global_gain,
   section_data,
   scale_factor_data,
-  /*gain_control_data,*/
   spectral_data,
   adtscrc_end_reg1,
   adtscrc_end_reg2,
   end_of_sequence
 };
 
-static const struct element_list node_aac_cpe0 = {
-  el_aac_cpe0,
-  { NULL, NULL }
-};
-
-static const struct element_list node_aac_cpe1 = {
-  el_aac_cpe1,
-  { NULL, NULL }
-};
-
 static const element_list_t node_aac_cpe = {
   el_aac_cpe,
-  { &node_aac_cpe0, &node_aac_cpe1 }
+  { NULL, NULL }
 };
 
 /*

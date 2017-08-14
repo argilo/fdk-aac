@@ -1040,7 +1040,7 @@ AAC_ENCODER_ERROR FDKaacEnc_ChannelElementWrite( HANDLE_TRANSPORTENC  hTpEnc,
   /* Iterate through sequence table */
   i = 0;
   ch = 0;
-  decision_bit = 1;
+  decision_bit = 0;
   do {
     /* some tmp values */
     SECTION_DATA *pChSectionData = NULL;
