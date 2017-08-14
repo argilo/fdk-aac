@@ -1657,6 +1657,7 @@ INT FDKsbrEnc_EnvInit (
   if (params->crcSbr) {
     hSbrElement->sbrConfigData.sbrSyntaxFlags |= SBR_SYNTAX_CRC;
   }
+  hSbrElement->sbrConfigData.sbrSyntaxFlags |= SBR_SYNTAX_SCALABLE;
 
   hSbrElement->sbrConfigData.noQmfBands = QMF_CHANNELS>>(2-params->downSampleFactor);
   switch (hSbrElement->sbrConfigData.noQmfBands)

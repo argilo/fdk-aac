@@ -1934,14 +1934,12 @@ const FIXP_DBL invCount[80]=  /* This could be 16-bit wide */
 
 static const rbd_id_t el_aac_sce[] = {
   adtscrc_start_reg1,
-  global_gain,
   ics_info,
-  section_data,
-  scale_factor_data,
-  pulse,
   tns_data_present,
   tns_data,
-  gain_control_data_present,
+  global_gain,
+  section_data,
+  scale_factor_data,
   /* gain_control_data, */
   spectral_data,
   adtscrc_end_reg1,
