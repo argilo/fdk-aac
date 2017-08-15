@@ -327,7 +327,7 @@ static inline INT isSbrActive(const HANDLE_AACENC_CONFIG hAacConfig)
 {
     INT sbrUsed = 0;
 
-    if ( (hAacConfig->audioObjectType==AOT_SBR) || (hAacConfig->audioObjectType==AOT_PS) )
+    if ( (hAacConfig->audioObjectType==AOT_SBR) || (hAacConfig->audioObjectType==AOT_PS) || (hAacConfig->audioObjectType==AOT_HDC) )
     {
         sbrUsed = 1;
     }
@@ -368,7 +368,7 @@ static SBR_PS_SIGNALING getSbrSignalingMode(
     sbrSignaling = SIG_IMPLICIT; /* default: implicit signaling */
   }
 
-  if ( (audioObjectType==AOT_AAC_LC) || (audioObjectType==AOT_SBR) || (audioObjectType==AOT_PS) ) {
+  if ( (audioObjectType==AOT_AAC_LC) || (audioObjectType==AOT_SBR) || (audioObjectType==AOT_PS) || (audioObjectType==AOT_HDC) ) {
     switch (transportType) {
       case TT_MP4_ADIF:
       case TT_MP4_ADTS:
@@ -431,7 +431,7 @@ static void FDKaacEnc_MapConfig(
   }
 
   /* transport type is usually AAC-LC. */
-  if ( (transport_AOT == AOT_SBR) || (transport_AOT == AOT_PS) ) {
+  if ( (transport_AOT == AOT_SBR) || (transport_AOT == AOT_PS) || (transport_AOT == AOT_HDC) ) {
     cc->aot           = AOT_AAC_LC;
   }
   else {
@@ -451,7 +451,7 @@ static void FDKaacEnc_MapConfig(
     }
   }
 
-  if ( (transport_AOT==AOT_SBR) || (transport_AOT==AOT_PS) ) {
+  if ( (transport_AOT==AOT_SBR) || (transport_AOT==AOT_PS) || (transport_AOT==AOT_HDC) ) {
     cc->sbrPresent=1;
     if (transport_AOT==AOT_PS) {
       cc->psPresent=1;
@@ -645,7 +645,7 @@ INT aacEncoder_LimitBitrate(
     bitRate = FDKmax(8000*nChannels, bitRate);
   }
 
-  if (aot == AOT_AAC_LC || aot == AOT_SBR || aot == AOT_PS)  {
+  if (aot == AOT_AAC_LC || aot == AOT_SBR || aot == AOT_PS || aot == AOT_HDC)  {
     bitRate = FDKmin(576000*nChannels, bitRate);
     /*bitRate = FDKmax(0*nChannels, bitRate);*/
   }
@@ -775,6 +775,14 @@ AACENC_ERROR FDKaacEnc_AdjustEncSettings(HANDLE_AACENCODER hAacEncoder,
       case AOT_AAC_LC:
       case AOT_SBR:
       case AOT_PS:
+          config->userTpType = (config->userTpType!=TT_UNKNOWN) ? config->userTpType : TT_MP4_ADTS;
+          hAacConfig->framelength = (config->userFramelength!=(UINT)-1) ? config->userFramelength : 1024;
+          if (hAacConfig->framelength != 1024) {
+            return AACENC_INVALID_CONFIG;
+          }
+          break;
+      case AOT_HDC:
+          hAacConfig->syntaxFlags |= AC_HDC;
           config->userTpType = (config->userTpType!=TT_UNKNOWN) ? config->userTpType : TT_MP4_ADTS;
           hAacConfig->framelength = (config->userFramelength!=(UINT)-1) ? config->userFramelength : 1024;
           if (hAacConfig->framelength != 1024) {
@@ -911,14 +919,14 @@ AACENC_ERROR FDKaacEnc_AdjustEncSettings(HANDLE_AACENCODER hAacEncoder,
     {
       UCHAR tpSignaling=getSbrSignalingMode(hAacConfig->audioObjectType, config->userTpType, config->userTpSignaling, hAacConfig->sbrRatio);
 
-      if ( (hAacConfig->audioObjectType==AOT_AAC_LC || hAacConfig->audioObjectType==AOT_SBR || hAacConfig->audioObjectType==AOT_PS) &&
+      if ( (hAacConfig->audioObjectType==AOT_AAC_LC || hAacConfig->audioObjectType==AOT_SBR || hAacConfig->audioObjectType==AOT_PS || hAacConfig->audioObjectType==AOT_HDC) &&
            (config->userTpType==TT_MP4_LATM_MCP1 || config->userTpType==TT_MP4_LATM_MCP0 || config->userTpType==TT_MP4_LOAS) &&
            (tpSignaling==1) && (config->userTpAmxv==0) ) {
              /* For backward compatible explicit signaling, AMV1 has to be active */
              return AACENC_INVALID_CONFIG;
       }
 
-      if ( (hAacConfig->audioObjectType==AOT_AAC_LC || hAacConfig->audioObjectType==AOT_SBR || hAacConfig->audioObjectType==AOT_PS) &&
+      if ( (hAacConfig->audioObjectType==AOT_AAC_LC || hAacConfig->audioObjectType==AOT_SBR || hAacConfig->audioObjectType==AOT_PS || hAacConfig->audioObjectType==AOT_HDC) &&
            (tpSignaling==0) && (hAacConfig->sbrRatio==1)) {
              /* Downsampled SBR has to be signaled explicitely (for transmission of SBR sampling fequency) */
              return AACENC_INVALID_CONFIG;
@@ -974,6 +982,7 @@ AACENC_ERROR FDKaacEnc_AdjustEncSettings(HANDLE_AACENCODER hAacEncoder,
       case AOT_AAC_LC:
       case AOT_SBR:
       case AOT_PS:
+      case AOT_HDC:
         hAacEncoder->metaDataAllowed = 1;
         if (((INT)hAacConfig->channelMode < 1) || ((INT)hAacConfig->channelMode > 7)) {
           config->userMetaDataMode = 0;
@@ -1781,6 +1790,7 @@ AACENC_ERROR aacEncoder_SetParam(
                   goto bail;
                 }
               case AOT_SBR:
+              case AOT_HDC:
                 if (!(hAacEncoder->encoder_modis & (ENC_MODE_FLAG_SBR))) {
                   err = AACENC_INVALID_CONFIG;
                   goto bail;

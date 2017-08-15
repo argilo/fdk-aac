@@ -105,7 +105,8 @@ AAC_ENCODER_ERROR FDKaacEnc_InitTnsConfiguration(INT bitrate,
                          TNS_CONFIG *tnsConfig,
                          PSY_CONFIGURATION *psyConfig,
                          INT active,
-                         INT useTnsPeak );
+                         INT useTnsPeak,
+                         UINT syntaxFlags );
 
 INT FDKaacEnc_TnsDetect(
               TNS_DATA *tnsData,

@@ -1648,6 +1648,9 @@ INT FDKsbrEnc_EnvInit (
   hSbrElement->sbrConfigData.sbrSyntaxFlags = 0;
 
   switch (aot) {
+  case AOT_HDC:
+    hSbrElement->sbrConfigData.sbrSyntaxFlags |= SBR_SYNTAX_SCALABLE;
+    break;
   case AOT_ER_AAC_ELD:
     hSbrElement->sbrConfigData.sbrSyntaxFlags |= SBR_SYNTAX_LOW_DELAY;
     break;
@@ -1657,7 +1660,6 @@ INT FDKsbrEnc_EnvInit (
   if (params->crcSbr) {
     hSbrElement->sbrConfigData.sbrSyntaxFlags |= SBR_SYNTAX_CRC;
   }
-  hSbrElement->sbrConfigData.sbrSyntaxFlags |= SBR_SYNTAX_SCALABLE;
 
   hSbrElement->sbrConfigData.noQmfBands = QMF_CHANNELS>>(2-params->downSampleFactor);
   switch (hSbrElement->sbrConfigData.noQmfBands)

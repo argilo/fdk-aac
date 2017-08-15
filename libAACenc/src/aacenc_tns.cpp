@@ -358,7 +358,8 @@ AAC_ENCODER_ERROR FDKaacEnc_InitTnsConfiguration(INT bitRate,
                                                  TNS_CONFIG *tC,
                                                  PSY_CONFIGURATION *pC,
                                                  INT active,
-                                                 INT useTnsPeak)
+                                                 INT useTnsPeak,
+                                                 UINT syntaxFlags)
 {
   int i;
   //float acfTimeRes   = (blockType == SHORT_WINDOW) ? 0.125f : 0.046875f;
@@ -410,7 +411,7 @@ AAC_ENCODER_ERROR FDKaacEnc_InitTnsConfiguration(INT bitRate,
 
       tC->confTab.filterEnabled[HIFILT] = 1;
       tC->confTab.filterEnabled[LOFILT] = 1;
-      tC->confTab.seperateFiltersAllowed = 0;
+      tC->confTab.seperateFiltersAllowed = (syntaxFlags & AC_HDC) ? 0 : 1;
 
       /* compute autocorrelation window based on maximum filter order for given block type */
       /* for (i = 0; i <= tC->maxOrder + 3; i++) {

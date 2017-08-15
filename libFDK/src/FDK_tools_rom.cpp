@@ -1934,12 +1934,15 @@ const FIXP_DBL invCount[80]=  /* This could be 16-bit wide */
 
 static const rbd_id_t el_aac_sce[] = {
   adtscrc_start_reg1,
-  ics_info,
-  tns_data_present,
-  tns_data,
+  element_instance_tag,
   global_gain,
+  ics_info,
   section_data,
   scale_factor_data,
+  pulse,
+  tns_data_present,
+  tns_data,
+  gain_control_data_present,
   /* gain_control_data, */
   spectral_data,
   adtscrc_end_reg1,
@@ -1951,7 +1954,115 @@ static const struct element_list node_aac_sce = {
   { NULL, NULL }
 };
 
-static const rbd_id_t el_aac_cpe[] =
+static const rbd_id_t el_aac_cpe[] = {
+  adtscrc_start_reg1,
+  element_instance_tag,
+  common_window,
+  link_sequence
+};
+
+static const rbd_id_t el_aac_cpe0[] =
+{
+  /*common_window = 0*/
+  global_gain,
+  ics_info,
+  section_data,
+  scale_factor_data,
+  pulse,
+  tns_data_present,
+  tns_data,
+  gain_control_data_present,
+  /*gain_control_data,*/
+  spectral_data,
+  next_channel,
+
+  adtscrc_start_reg2,
+  global_gain,
+  ics_info,
+  section_data,
+  scale_factor_data,
+  pulse,
+  tns_data_present,
+  tns_data,
+  gain_control_data_present,
+  /*gain_control_data,*/
+  spectral_data,
+  adtscrc_end_reg1,
+  adtscrc_end_reg2,
+  end_of_sequence
+};
+
+static const rbd_id_t el_aac_cpe1[] =
+{
+  /* common_window = 1 */
+  ics_info,
+  ms,
+
+  global_gain,
+  section_data,
+  scale_factor_data,
+  pulse,
+  tns_data_present,
+  tns_data,
+  gain_control_data_present,
+  /*gain_control_data,*/
+  spectral_data,
+  next_channel,
+
+  adtscrc_start_reg2,
+  global_gain,
+  section_data,
+  scale_factor_data,
+  pulse,
+  tns_data_present,
+  tns_data,
+  gain_control_data_present,
+  /*gain_control_data,*/
+  spectral_data,
+  adtscrc_end_reg1,
+  adtscrc_end_reg2,
+  end_of_sequence
+};
+
+static const struct element_list node_aac_cpe0 = {
+  el_aac_cpe0,
+  { NULL, NULL }
+};
+
+static const struct element_list node_aac_cpe1 = {
+  el_aac_cpe1,
+  { NULL, NULL }
+};
+
+static const element_list_t node_aac_cpe = {
+  el_aac_cpe,
+  { &node_aac_cpe0, &node_aac_cpe1 }
+};
+
+/*
+ * AOT 127
+ * epConfig = -1
+ */
+
+static const rbd_id_t el_hdc_sce[] = {
+  adtscrc_start_reg1,
+  ics_info,
+  tns_data_present,
+  tns_data,
+  global_gain,
+  section_data,
+  scale_factor_data,
+  spectral_data,
+  adtscrc_end_reg1,
+  end_of_sequence
+};
+
+static const struct element_list node_hdc_sce = {
+  el_hdc_sce,
+  { NULL, NULL }
+};
+
+static const rbd_id_t el_hdc_cpe[] =
 {
   adtscrc_start_reg1,
   ics_info,
@@ -1977,8 +2088,8 @@ static const rbd_id_t el_aac_cpe[] =
   end_of_sequence
 };
 
-static const element_list_t node_aac_cpe = {
-  el_aac_cpe,
+static const element_list_t node_hdc_cpe = {
+  el_hdc_cpe,
   { NULL, NULL }
 };
 
@@ -2502,6 +2613,14 @@ const element_list_t * getBitstreamElementList(AUDIO_OBJECT_TYPE aot, SCHAR epCo
         return &node_aac_sce;
       } else {
         return &node_aac_cpe;
+      }
+      break;
+    case AOT_HDC:
+      FDK_ASSERT(epConfig == -1);
+      if (nChannels == 1) {
+        return &node_hdc_sce;
+      } else {
+        return &node_hdc_cpe;
       }
       break;
     case AOT_ER_AAC_LC:

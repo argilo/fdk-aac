@@ -347,7 +347,8 @@ AAC_ENCODER_ERROR FDKaacEnc_psyMainInit(PSY_INTERNAL *hPsy,
        &(hPsy->psyConf[0].tnsConf),
        &hPsy->psyConf[0],
         (INT)(tnsMask&2),
-        (INT)(tnsMask&8) );
+        (INT)(tnsMask&8),
+        syntaxFlags );
 
   if (ErrorStatus != AAC_ENC_OK)
     return ErrorStatus;
@@ -368,7 +369,8 @@ AAC_ENCODER_ERROR FDKaacEnc_psyMainInit(PSY_INTERNAL *hPsy,
            &hPsy->psyConf[1].tnsConf,
            &hPsy->psyConf[1],
             (INT)(tnsMask&1),
-            (INT)(tnsMask&4) );
+            (INT)(tnsMask&4),
+            syntaxFlags );
 
     if (ErrorStatus != AAC_ENC_OK)
     return ErrorStatus;

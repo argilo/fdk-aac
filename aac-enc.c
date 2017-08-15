@@ -37,6 +37,7 @@ void usage(const char* name) {
 	fprintf(stderr, "\t29\tHE-AAC v2\n");
 	fprintf(stderr, "\t23\tAAC-LD\n");
 	fprintf(stderr, "\t39\tAAC-ELD\n");
+	fprintf(stderr, "\t127\tHDC\n");
 }
 
 int main(int argc, char *argv[]) {

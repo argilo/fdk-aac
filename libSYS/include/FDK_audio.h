@@ -198,6 +198,7 @@ typedef enum
   AOT_LD_MPEGS         = 44, /**< Low Delay MPEG Surround                   */
 
   /* Pseudo AOTs */
+  AOT_HDC              = 127, /**< Virtual AOT for HDC                                    */
   AOT_DRM_AAC          = 143, /**< Virtual AOT for DRM (ER-AAC-SCAL without SBR)          */
   AOT_DRM_SBR          = 144, /**< Virtual AOT for DRM (ER-AAC-SCAL with SBR)             */
   AOT_DRM_MPEG_PS      = 145  /**< Virtual AOT for DRM (ER-AAC-SCAL with SBR and MPEG-PS) */
@@ -308,6 +309,7 @@ typedef enum
 #define AC_MPS_RES      0x080000  /*!< MPS residual individual channel data. */
 #define AC_DAB          0x800000  /*!< DAB bit stream syntax */
 #define AC_LD_MPS     0x01000000  /*!< Low Delay MPS. */
+#define AC_HDC        0x02000000  /*!< HDC */
 
 
 /* CODER_CONFIG::flags */
