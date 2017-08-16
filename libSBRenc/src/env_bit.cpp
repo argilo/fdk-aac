@@ -217,9 +217,11 @@ FDKsbrEnc_AssembleSbrBitstream( HANDLE_COMMON_DATA  hCmonData,
       /*
         append fill bits
       */
-      FDKwriteBits(&hCmonData->sbrBitbuf, 0,  hCmonData->sbrFillBits );
+      if ( !(sbrSyntaxFlags & SBR_SYNTAX_HDC) ) {
+        FDKwriteBits(&hCmonData->sbrBitbuf, 0,  hCmonData->sbrFillBits );
 
-      FDK_ASSERT(FDKgetValidBits(&hCmonData->sbrBitbuf) % 8 == 4);
+        FDK_ASSERT(FDKgetValidBits(&hCmonData->sbrBitbuf) % 8 == 4);
+      }
     }
 
     /*

@@ -1650,6 +1650,7 @@ INT FDKsbrEnc_EnvInit (
   switch (aot) {
   case AOT_HDC:
     hSbrElement->sbrConfigData.sbrSyntaxFlags |= SBR_SYNTAX_SCALABLE;
+    hSbrElement->sbrConfigData.sbrSyntaxFlags |= SBR_SYNTAX_HDC;
     break;
   case AOT_ER_AAC_ELD:
     hSbrElement->sbrConfigData.sbrSyntaxFlags |= SBR_SYNTAX_LOW_DELAY;
