@@ -1473,7 +1473,7 @@ AAC_ENCODER_ERROR FDKaacEnc_WriteBitstream(HANDLE_TRANSPORTENC hTpEnc,
     /* For EXT_FIL or EXT_FILL_DATA we could do an additional sanity check here */
   }
 
-  if (!(syntaxFlags & (AC_SCALABLE|AC_ER))) {
+  if (!(syntaxFlags & (AC_SCALABLE|AC_ER|AC_HDC))) {
     FDKwriteBits(hBs, ID_END, EL_ID_BITS);
   }
 

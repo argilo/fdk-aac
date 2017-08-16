@@ -873,7 +873,7 @@ AAC_ENCODER_ERROR FDKaacEnc_EncodeFrame( HANDLE_AAC_ENC       hAacEnc,          
         }
     }
 
-    if (!(hAacEnc->config->syntaxFlags & (AC_SCALABLE|AC_ER))) {
+    if (!(hAacEnc->config->syntaxFlags & (AC_SCALABLE|AC_ER|AC_HDC))) {
       qcOut->globalExtBits += EL_ID_BITS;  /* add bits for ID_END */
     }
 
