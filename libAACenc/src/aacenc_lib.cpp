@@ -783,6 +783,7 @@ AACENC_ERROR FDKaacEnc_AdjustEncSettings(HANDLE_AACENCODER hAacEncoder,
           break;
       case AOT_HDC:
           hAacConfig->syntaxFlags |= AC_HDC;
+          hAacConfig->useIS = 0;
           config->userTpType = (config->userTpType!=TT_UNKNOWN) ? config->userTpType : TT_MP4_ADTS;
           hAacConfig->framelength = (config->userFramelength!=(UINT)-1) ? config->userFramelength : 1024;
           if (hAacConfig->framelength != 1024) {
